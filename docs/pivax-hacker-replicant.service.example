@@ -1,0 +1,23 @@
+# Example systemd unit. Copy to /etc/systemd/system/pivax-hacker-replicant.service,
+# adjust the paths/user, then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now pivax-hacker-replicant
+#
+# Reads config from .env in WorkingDirectory via EnvironmentFile -- copy
+# .env.example to .env there first and fill it in.
+
+[Unit]
+Description=PiVAX Hacker Replicant - chat backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/pivax-hacker-replicant/server.js
+WorkingDirectory=/opt/pivax-hacker-replicant
+EnvironmentFile=/opt/pivax-hacker-replicant/.env
+Restart=always
+RestartSec=5
+User=pi
+
+[Install]
+WantedBy=multi-user.target

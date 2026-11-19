@@ -1,0 +1,23 @@
+# Example systemd unit for pivax-bootapi.py -- runs ON THE MACHINE whose
+# terminal session you want the agent to be able to read/type into (for
+# PiVAX that's the Pi driving the VAX 8600/OpenVMS simulator itself). Needs
+# the `screen` package and read/write access to the `screen` session your
+# simh console runs in.
+#
+# Copy to /etc/systemd/system/pivax-bootapi.service, adjust the path/user,
+# then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now pivax-bootapi
+
+[Unit]
+Description=PiVAX boot-API (screen bridge for the Hacker Replicant)
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/pivax-hacker-replicant/pivax-bootapi.py
+Restart=always
+RestartSec=5
+User=pi
+
+[Install]
+WantedBy=multi-user.target
