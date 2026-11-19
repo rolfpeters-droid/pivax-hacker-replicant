@@ -119,6 +119,43 @@ locally, point `LOCAL_MODEL` at a non-thinking model instead (`llama3.1`,
 
 ## Setup
 
+### Setting up the base machine (if you don't have one yet)
+
+This repo is the AI tutor layer only — it assumes a VAX/VMS simulator is
+already running somewhere with its terminal attached to a `screen`
+session. If you don't have that yet:
+
+- **Simulator:** [open-simh](https://github.com/simh/simh) includes a
+  VAX 8600 simulator (what the original build used), run under GNU
+  `screen` so the session can be shared between your own web console and
+  this repo's boot-API.
+- **OpenVMS media and license:** this is the part we can't hand you a
+  shortcut for. VAX/VMS licenses (including DEC/HPE TCPIP Services and
+  DECnet) stopped being legally obtainable once the VSI hobbyist program
+  was discontinued (2020/2025) — there is currently no known legitimate
+  free route to OpenVMS installation media for a new hobbyist setup.
+  Sourcing a valid license and media is on you; we're not linking or
+  including any here.
+- **Build-mechanics reference:** once you have legitimate media, the
+  original PiVAX build followed the SIMH VAX8600 + OpenVMS 7.3 install
+  walkthrough at [blog.poggs.com](https://blog.poggs.com) for the actual
+  simulator configuration and boot process — useful for the *mechanics*
+  of the install (disk setup, boot flow, console attach), independent of
+  where your media comes from.
+- **Networking (optional but recommended):** for CMU TCP/IP (the
+  networking stack used in the original build, needed if you want the
+  VMS guest reachable as its own host on your LAN rather than purely
+  console-only) the install kit is `CMUIP066.iso` (savesets + FAQs,
+  findable via general VMS-hobbyist archives) — set up as a CD-ROM device
+  during the VMS install. A `tap`-interface-in-bridge setup on the host
+  (rather than attaching the NIC directly to a physical interface) avoids
+  a common hairpin-routing gotcha where the host can't reach the guest's
+  own IP.
+
+None of this is required to get the *chat tutor* running — `CONSOLE_URL`
+and `BOOTAPI_BASE` just need to point at whatever VAX/VMS `screen` session
+you end up with, however you got there.
+
 ### Prerequisites
 
 - GNU `screen`, installed on the Pi (`apt install screen` on
@@ -126,7 +163,8 @@ locally, point `LOCAL_MODEL` at a non-thinking model instead (`llama3.1`,
   out to it directly, and your own web console almost certainly does too.
 - A running PiVAX (VAX 8600 / OpenVMS 7.3 under simh) with its terminal
   session attached to a `screen` session, and your own existing web
-  console pointed at that same session.
+  console pointed at that same session. See "Setting up the base machine"
+  above if you're starting from scratch.
 - Node.js 18+ and Python 3 on that same host (or reachable over the
   network from it).
 - [Ollama](https://ollama.com) running somewhere reachable (for the free
